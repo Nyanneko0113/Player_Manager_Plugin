@@ -1,0 +1,8 @@
+main: org.nyanneko0113.player_manager.PlayerManager
+version: 0.0.1_beta
+name: PlayerManager
+
+commands:
+  normal_mute:
+    description: ミュートするコマンド
+    permission: playermanager.commands.normalmute
