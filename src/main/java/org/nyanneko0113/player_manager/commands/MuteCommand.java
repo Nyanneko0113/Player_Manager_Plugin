@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.nyanneko0113.player_manager.manager.MuteManager;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class MuteCommand implements CommandExecutor {
 
@@ -15,6 +16,15 @@ public class MuteCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("normal_mute")) {
             try {
                 MuteManager.normalMute(Bukkit.getOfflinePlayer(args[0]), args[1]);
+                send.sendMessage("ミュートしました。");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else if (cmd.getName().equalsIgnoreCase("temp_mute")) {
+            Date date = new Date(System.currentTimeMillis() + Long.parseLong(args[2]) * Long.parseLong(args[3]));
+            try {
+                MuteManager.tempMute(Bukkit.getOfflinePlayer(args[0]), args[1], date);
                 send.sendMessage("ミュートしました。");
             } catch (IOException e) {
                 throw new RuntimeException(e);

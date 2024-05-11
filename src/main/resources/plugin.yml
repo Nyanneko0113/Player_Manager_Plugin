@@ -6,3 +6,6 @@ commands:
   normal_mute:
     description: ミュートするコマンド
     permission: playermanager.commands.normalmute
+  temp_mute:
+    description: ミュートするコマンド
+    permission: playermanager.commands.normalmute

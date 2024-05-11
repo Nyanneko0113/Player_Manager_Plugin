@@ -1,14 +1,16 @@
 package org.nyanneko0113.player_manager.manager;
 
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.nyanneko0113.player_manager.PlayerManager;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class MuteManager {
@@ -28,6 +30,64 @@ public class MuteManager {
 
             try (BufferedWriter write = new BufferedWriter(new FileWriter(getFile()))) {
                 write.write(players.toString());
+            }
+        }
+    }
+
+    public static void tempMute(OfflinePlayer player, String reason, Date date) throws IOException {
+        createJson();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(getFile()))) {
+            JsonObject json = new JsonObject();
+            json.addProperty("name", player.getName());
+            json.addProperty("uuid", player.getUniqueId().toString());
+            json.addProperty("reason", reason);
+            json.addProperty("type", MuteType.TEMP.name());
+            json.addProperty("date", date.getTime());
+
+            JsonObject players = new Gson().fromJson(reader, JsonObject.class);
+            players.get("players").getAsJsonArray().add(json);
+
+            try (BufferedWriter write = new BufferedWriter(new FileWriter(getFile()))) {
+                write.write(players.toString());
+            }
+        }
+    }
+
+    public static void removeMute(Player player) throws IOException {
+        Bukkit.broadcastMessage("removeMute4");
+        if (getFile().exists()) {
+
+            StringBuilder file_read = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new FileReader(getFile()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    file_read.append(line);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            JsonObject json = new JsonParser().parse(file_read.toString()).getAsJsonObject();
+
+            JsonArray players = json.getAsJsonArray("players");
+            Bukkit.broadcastMessage("removeMute3");
+            for (int n = 0; n < players.size(); n++) {
+                JsonObject mute = players.get(n).getAsJsonObject();
+
+                String name = mute.get("name").getAsString();
+                Bukkit.broadcastMessage("removeMute2");
+                if (name.equalsIgnoreCase(player.getName())) {
+                    players.remove(n);
+
+                    try (BufferedWriter write = new BufferedWriter(new FileWriter(getFile()))) {
+                        write.write(json.toString());
+                        Bukkit.broadcastMessage("removeMute1" + "\n" +
+                                json);
+                        break;
+                    }
+                }
+
             }
         }
     }
@@ -57,6 +117,10 @@ public class MuteManager {
                     if (type.equalsIgnoreCase("NORMAL")) {
                         return new Mute(name, reason);
                     }
+                    else if (type.equalsIgnoreCase("TEMP")) {
+                        long date = mute.get("date").getAsLong();
+                        return new Mute(name, reason, date);
+                    }
                 }
 
             }
@@ -66,6 +130,32 @@ public class MuteManager {
             throw new NullPointerException();
         }
         return null;
+    }
+
+    public static void taskRun() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player players : Bukkit.getOnlinePlayers()) {
+                    try {
+                        Mute mute = getMute(players);
+
+                        if (mute != null) {
+                            if (mute.getType().equals(MuteType.TEMP)) {
+                                Bukkit.broadcastMessage(System.currentTimeMillis() + ":" + mute.getDate().getTime() + "\n" +
+                                        Boolean.parseBoolean(String.valueOf(System.currentTimeMillis() > mute.getDate().getTime())));
+                                if (System.currentTimeMillis() > mute.getDate().getTime()) {
+                                    mute.remove();
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }.runTaskTimer(PlayerManager.getInstance(), 0L, 20L);
+
     }
 
     private static void createJson() throws IOException {
@@ -99,10 +189,10 @@ public class MuteManager {
             this.date = null;
         }
 
-        public Mute(String name, String reason, long date) {
+        public Mute(String name, String reason, Long date) {
             this.name = name;
             this.reason = reason;
-            this.type = MuteType.NORMAL;
+            this.type = MuteType.TEMP;
             this.date = date;
         }
 
@@ -126,6 +216,26 @@ public class MuteManager {
                 throw new UnsupportedOperationException("NormalBanのため取得できません。");
             }
 
+        }
+
+        public String getDateString() {
+            LocalDateTime datetime = LocalDateTime.ofInstant(getDate().toInstant(), ZoneId.systemDefault());
+            return datetime.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm"));
+        }
+
+        public void remove() throws IOException {
+            MuteManager.removeMute(getPlayer());
+        }
+
+        public String toString() {
+            if (getType().equals(MuteType.NORMAL)) {
+                return "{name:" + name + ",uuid:" + getPlayer().getUniqueId().toString() + ",type:" + getType() + "}";
+            }
+            else if (getType().equals(MuteType.TEMP)) {
+                return "{name:" + name + ",uuid:" + getPlayer().getUniqueId().toString() + ",type:" + getType() + "date: " + getDate() + ",date_string" + getDateString() + "}";
+            }
+
+            return null;
         }
 
     }
