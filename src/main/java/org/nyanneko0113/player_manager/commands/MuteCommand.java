@@ -36,6 +36,14 @@ public class MuteCommand implements CommandExecutor {
             String list = StringUtils.join(MuteManager.getMuteList(), ",");
             send.sendMessage(TextUtil.TEXT_INFO + "ミュートしているプレイヤー:" + list);
         }
+        else if (cmd.getName().equalsIgnoreCase("unmute")) {
+            try {
+                MuteManager.removeMute(Bukkit.getPlayer(args[0]));
+                send.sendMessage(args[0] + "のミュートを解除しました。");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return false;
     }
 

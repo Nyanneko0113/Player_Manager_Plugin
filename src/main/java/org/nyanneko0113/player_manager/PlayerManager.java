@@ -14,6 +14,8 @@ public class PlayerManager extends JavaPlugin {
 
         getCommand("normal_mute").setExecutor(new MuteCommand());
         getCommand("temp_mute").setExecutor(new MuteCommand());
+        getCommand("unmute").setExecutor(new MuteCommand());
+        getCommand("mute_list").setExecutor(new MuteCommand());
         getCommand("playerinfo").setExecutor(new PlayerInfoCommand());
 
         getServer().getPluginManager().registerEvents(new PlayerChatListener(), this);
