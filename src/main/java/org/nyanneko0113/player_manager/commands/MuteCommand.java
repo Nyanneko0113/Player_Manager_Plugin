@@ -1,10 +1,12 @@
 package org.nyanneko0113.player_manager.commands;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.nyanneko0113.player_manager.manager.MuteManager;
+import org.nyanneko0113.player_manager.util.TextUtil;
 
 import java.io.IOException;
 import java.util.Date;
@@ -29,6 +31,10 @@ public class MuteCommand implements CommandExecutor {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+        else if (cmd.getName().equalsIgnoreCase("mute_list")) {
+            String list = StringUtils.join(MuteManager.getMuteList(), ",");
+            send.sendMessage(TextUtil.TEXT_INFO + "ミュートしているプレイヤー:" + list);
         }
         return false;
     }

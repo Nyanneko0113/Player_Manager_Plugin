@@ -11,7 +11,10 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class MuteManager {
 
@@ -58,17 +61,7 @@ public class MuteManager {
         Bukkit.broadcastMessage("removeMute4");
         if (getFile().exists()) {
 
-            StringBuilder file_read = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new FileReader(getFile()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    file_read.append(line);
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            JsonObject json = new JsonParser().parse(file_read.toString()).getAsJsonObject();
+            JsonObject json = getJson();
 
             JsonArray players = json.getAsJsonArray("players");
             Bukkit.broadcastMessage("removeMute3");
@@ -95,15 +88,7 @@ public class MuteManager {
     public static Mute getMute(Player player) throws IOException{
         if (getFile().exists()) {
 
-            StringBuilder file_read = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new FileReader(getFile()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    file_read.append(line);
-                }
-            }
-
-            JsonObject json = new JsonParser().parse(file_read.toString()).getAsJsonObject();
+            JsonObject json = getJson();
 
             JsonArray players = json.getAsJsonArray("players");
             for (int n = 0; n < players.size(); n++) {
@@ -130,6 +115,54 @@ public class MuteManager {
             throw new NullPointerException();
         }
         return null;
+    }
+
+    public static List<Mute> getMuteList() {
+        if (getFile().exists()) {
+            JsonObject json = getJson();
+
+            JsonArray players = json.getAsJsonArray("players");
+            List<Mute> mute_list = new ArrayList<>();
+            for (int n = 0; n < players.size(); n++) {
+                JsonObject mute = players.get(n).getAsJsonObject();
+
+                String name = mute.get("name").getAsString();
+                String type = mute.get("type").getAsString();
+                String reason = mute.get("reason").getAsString();
+                long date = mute.get("date").getAsLong();
+
+                if (type.equalsIgnoreCase("NORMAL")) {
+                    mute_list.add(new Mute(name, reason));
+                }
+                else if (type.equalsIgnoreCase("TEMP")) {
+                    mute_list.add(new Mute(name, reason, date));
+                }
+
+            }
+            return mute_list;
+        }
+        else {
+            throw new NullPointerException();
+        }
+    }
+
+    private static JsonObject getJson() {
+        if (getFile().exists()) {
+            StringBuilder file_read = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new FileReader(getFile()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    file_read.append(line);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return new JsonParser().parse(file_read.toString()).getAsJsonObject();
+        }
+        else {
+            throw new NullPointerException();
+        }
     }
 
     public static void taskRun() {
