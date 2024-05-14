@@ -9,3 +9,6 @@ commands:
   temp_mute:
     description: ミュートするコマンド
     permission: playermanager.commands.normalmute
+  playerinfo:
+    description: プレイヤーの情報を取得するコマンド
+    permission: playermanager.commands.playerinfo
