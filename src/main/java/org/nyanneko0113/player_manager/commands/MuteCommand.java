@@ -33,8 +33,7 @@ public class MuteCommand implements CommandExecutor {
             }
         }
         else if (cmd.getName().equalsIgnoreCase("mute_list")) {
-            String list = StringUtils.join(MuteManager.getMuteList(), ",");
-            send.sendMessage(TextUtil.TEXT_INFO + "ミュートしているプレイヤー:" + list);
+            send.sendMessage(TextUtil.TEXT_INFO + "ミュートしているプレイヤー:" + MuteManager.getMuteList());
         }
         else if (cmd.getName().equalsIgnoreCase("unmute")) {
             try {

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.nyanneko0113.player_manager.util.TextUtil;
 
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 public class PlayerInfoCommand implements CommandExecutor {
 

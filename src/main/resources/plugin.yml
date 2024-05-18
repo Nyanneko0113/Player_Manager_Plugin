@@ -8,7 +8,7 @@ commands:
     permission: playermanager.commands.normalmute
   temp_mute:
     description: ミュートするコマンド
-    permission: playermanager.commands.tempmute
+    permission: playermanager.commands.temp/mute
   mute_list:
     description: ミュートのリストを表示するコマンド
     permission: playermanager.commands.mute_list
@@ -18,3 +18,6 @@ commands:
   playerinfo:
     description: プレイヤーの情報を取得するコマンド
     permission: playermanager.commands.playerinfo
+  command_log:
+    description: コマンドログを有効にするコマンド
+    permission: playermanager.commands.command_log
