@@ -8,13 +8,25 @@ commands:
     permission: playermanager.commands.normalmute
   temp_mute:
     description: ミュートするコマンド
-    permission: playermanager.commands.temp/mute
+    permission: playermanager.commands.tempmute
   mute_list:
     description: ミュートのリストを表示するコマンド
     permission: playermanager.commands.mute_list
   unmute:
     description: ミュートを解除するコマンド
     permission: playermanager.commands.unmute
+  normal_ban:
+    description: Banするコマンド
+    permission: playermanager.commands.normalmute
+  temp_ban:
+    description: tempBanするコマンド
+    permission: playermanager.commands.tempban
+  unban:
+    description: Banを解除するコマンド
+    permission: playermanager.commands.unban
+  ban_list:
+    description: Banするコマンド
+    permission: playermanager.commands.normalmute
   playerinfo:
     description: プレイヤーの情報を取得するコマンド
     permission: playermanager.commands.playerinfo

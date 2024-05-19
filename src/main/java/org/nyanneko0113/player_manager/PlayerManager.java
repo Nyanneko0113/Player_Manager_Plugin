@@ -2,6 +2,7 @@ package org.nyanneko0113.player_manager;
 
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.nyanneko0113.player_manager.commands.BanCommand;
 import org.nyanneko0113.player_manager.commands.MuteCommand;
 import org.nyanneko0113.player_manager.commands.PlayerInfoCommand;
 import org.nyanneko0113.player_manager.commands.SetCommand;
@@ -21,6 +22,8 @@ public class PlayerManager extends JavaPlugin {
         getCommand("temp_mute").setExecutor(new MuteCommand());
         getCommand("unmute").setExecutor(new MuteCommand());
         getCommand("mute_list").setExecutor(new MuteCommand());
+        getCommand("normal_ban").setExecutor(new BanCommand());
+        getCommand("temp_ban").setExecutor(new BanCommand());
         getCommand("playerinfo").setExecutor(new PlayerInfoCommand());
         getCommand("command_log").setExecutor(new SetCommand());
 
