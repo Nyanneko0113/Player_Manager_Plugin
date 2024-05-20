@@ -30,6 +30,12 @@ commands:
   playerinfo:
     description: プレイヤーの情報を取得するコマンド
     permission: playermanager.commands.playerinfo
+  kick:
+    description: プレイヤーをキックするコマンド
+    permission: playermanager.commands.kick
+  all_kick:
+    description: OP以外をキックするコマンド
+    permission: playermanager.commands.allkick
   command_log:
     description: コマンドログを有効にするコマンド
     permission: playermanager.commands.command_log
