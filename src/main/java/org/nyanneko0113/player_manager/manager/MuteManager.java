@@ -57,7 +57,7 @@ public class MuteManager {
         }
     }
 
-    public static void removeMute(Player player) throws IOException {
+    public static void removeMute(OfflinePlayer player) throws IOException {
         Bukkit.broadcastMessage("removeMute4");
         if (getFile().exists()) {
 
@@ -142,7 +142,7 @@ public class MuteManager {
             return mute_list;
         }
         else {
-            throw new NullPointerException();
+            return new ArrayList<>();
         }
     }
 
@@ -175,8 +175,6 @@ public class MuteManager {
 
                         if (mute != null) {
                             if (mute.getType().equals(MuteType.TEMP)) {
-                                Bukkit.broadcastMessage(System.currentTimeMillis() + ":" + mute.getDate().getTime() + "\n" +
-                                        Boolean.parseBoolean(String.valueOf(System.currentTimeMillis() > mute.getDate().getTime())));
                                 if (System.currentTimeMillis() > mute.getDate().getTime()) {
                                     mute.remove();
                                 }
@@ -229,8 +227,8 @@ public class MuteManager {
             this.date = date;
         }
 
-        public Player getPlayer() {
-            return Bukkit.getPlayer(name);
+        public OfflinePlayer getPlayer() {
+            return Bukkit.getOfflinePlayer(name);
         }
 
         public String getReason() {
@@ -257,7 +255,7 @@ public class MuteManager {
         }
 
         public void remove() throws IOException {
-            MuteManager.removeMute(getPlayer());
+            MuteManager.removeMute(getPlayer().getPlayer());
         }
 
         public String toString() {

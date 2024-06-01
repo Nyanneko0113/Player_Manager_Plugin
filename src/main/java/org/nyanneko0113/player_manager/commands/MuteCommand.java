@@ -2,10 +2,19 @@ package org.nyanneko0113.player_manager.commands;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.Skull;
+import org.nyanneko0113.player_manager.manager.InventoryManager;
 import org.nyanneko0113.player_manager.manager.MuteManager;
 import org.nyanneko0113.player_manager.util.TextUtil;
 
@@ -75,11 +84,12 @@ public class MuteCommand implements CommandExecutor {
             }
         }
         else if (cmd.getName().equalsIgnoreCase("mute_list")) {
-            send.sendMessage(TextUtil.TEXT_INFO + "ミュートしているプレイヤー:" + MuteManager.getMuteList());
+            Player player = (Player) send;
+            player.openInventory(InventoryManager.openMuteList());
         }
         else if (cmd.getName().equalsIgnoreCase("unmute")) {
             try {
-                MuteManager.removeMute(Bukkit.getPlayer(args[0]));
+                MuteManager.removeMute(Bukkit.getOfflinePlayer(args[0]));
                 send.sendMessage(args[0] + "のミュートを解除しました。");
             } catch (IOException e) {
                 throw new RuntimeException(e);
