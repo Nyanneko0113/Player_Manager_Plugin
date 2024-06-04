@@ -22,8 +22,15 @@ public class InventoryClickListener implements Listener {
         Inventory inv = event.getInventory();
         HumanEntity player = event.getWhoClicked();
 
-        if (inv.getTitle().equalsIgnoreCase(ChatColor.AQUA + "ミュートしているプレイヤー")) {
+        if (inv.getTitle().contains(ChatColor.DARK_AQUA + "ミュートしているプレイヤー")) {
             event.setCancelled(true);
+
+            if (event.getSlot() == 53) {
+                String page = inv.getTitle().replace(ChatColor.DARK_AQUA + "ミュートしているプレイヤー(", "").replace("ページ目)", "");
+
+                player.openInventory(InventoryManager.inv_page.getInventory(Integer.parseInt(page) + 1));
+            }
         }
+
     }
 }
