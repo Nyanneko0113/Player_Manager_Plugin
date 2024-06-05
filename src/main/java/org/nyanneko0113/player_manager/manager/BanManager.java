@@ -26,4 +26,8 @@ public class BanManager {
     public static BanEntry getBan(OfflinePlayer player) {
         return ban_list_name.getBanEntry(player.getName());
     }
+
+    public static boolean isBan(OfflinePlayer player) {
+        return ban_list_name.isBanned(player.getName());
+    }
 }
