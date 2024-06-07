@@ -15,10 +15,12 @@ import org.nyanneko0113.player_manager.commands.MuteCommand;
 import org.nyanneko0113.player_manager.manager.InventoryManager;
 import org.nyanneko0113.player_manager.manager.MuteManager;
 
+import java.io.IOException;
+
 public class InventoryClickListener implements Listener {
 
     @EventHandler
-    public void onClick(InventoryClickEvent event) {
+    public void onClick(InventoryClickEvent event) throws IOException {
         Inventory inv = event.getInventory();
         HumanEntity player = event.getWhoClicked();
 
@@ -29,6 +31,18 @@ public class InventoryClickListener implements Listener {
                 String page = inv.getTitle().replace(ChatColor.DARK_AQUA + "ミュートしているプレイヤー(", "").replace("ページ目)", "");
 
                 player.openInventory(InventoryManager.inv_page.getInventory(Integer.parseInt(page) + 1));
+            }
+            else {
+                SkullMeta meta = (SkullMeta) event.getCurrentItem().getItemMeta();
+                player.openInventory(InventoryManager.openMute(meta.getOwningPlayer()));
+            }
+        }
+        else if (inv.getTitle().contains("のミュート解除しますか？")) {
+            if (event.getSlot() == 11) {
+                String player_name = inv.getTitle().replace("のミュート解除しますか？", "");
+
+                MuteManager.removeMute(Bukkit.getOfflinePlayer(player_name));
+                player.sendMessage("ミュートを解除しました。");
             }
         }
 

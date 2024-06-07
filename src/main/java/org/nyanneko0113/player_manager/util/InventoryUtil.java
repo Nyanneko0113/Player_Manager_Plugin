@@ -69,6 +69,10 @@ public class InventoryUtil {
         }
     }
 
+    public void clearAllItem(){
+        inv_list.forEach(Inventory::clear);
+    }
+
     public Inventory getInventory(int page) {
         if (page >= 1) {
             return inv_list.get(page - 1);

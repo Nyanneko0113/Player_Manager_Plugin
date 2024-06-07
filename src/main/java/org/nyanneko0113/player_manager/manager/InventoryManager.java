@@ -1,12 +1,13 @@
 package org.nyanneko0113.player_manager.manager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
+import org.bukkit.material.Wool;
 import org.nyanneko0113.player_manager.util.InventoryUtil;
 
 import java.util.ArrayList;
@@ -91,6 +92,24 @@ public class InventoryManager {
 
             return inv_page.getInventory(1);
         }
+    }
+
+    public static Inventory openMute(OfflinePlayer player) {
+        Inventory inv = Bukkit.createInventory(null, 9 * 3, ChatColor.DARK_AQUA + player.getName() + "のミュート解除しますか？");
+
+        ItemStack green = new Wool(DyeColor.GREEN).toItemStack(1);
+        ItemMeta green_meta = green.getItemMeta();
+        green_meta.setDisplayName("解除する");
+        green.setItemMeta(green_meta);
+        ItemStack red = new Wool(DyeColor.RED).toItemStack(1);
+        ItemMeta red_meta = red.getItemMeta();
+        red_meta.setDisplayName("解除しない");
+        red.setItemMeta(red_meta);
+
+        inv.setItem(11, green);
+        inv.setItem(14, red);
+
+        return inv;
     }
 
 }
