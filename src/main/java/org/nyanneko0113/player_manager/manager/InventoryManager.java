@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Wool;
 import org.nyanneko0113.player_manager.util.InventoryUtil;
+import org.nyanneko0113.player_manager.util.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,24 +29,21 @@ public class InventoryManager {
             for (int i = 0; i < mute_list.size(); i++) {
                 Bukkit.broadcastMessage(i + "\n" + mute_list.size() + "\n" + mute_list);
                 MuteManager.Mute mutes = mute_list.get(i);
-                ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-                SkullMeta item_meta = (SkullMeta) item.getItemMeta();
-                item_meta.setOwner(mutes.getPlayer().getName());
+
+                ItemUtil item;
+                String name = mutes.getPlayer().getName();
                 if (mutes.getType().equals(MuteManager.MuteType.NORMAL)) {
-                    item_meta.setLore(Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason()));
-                    item.setItemMeta(item_meta);
+                    List<String> lore = Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason());
+                    item = new ItemUtil(mutes.getPlayer(), name, lore);
                 }
                 else {
-                    item_meta.setLore(Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason(), "期間:" + mutes.getDateString()));
-                    item.setItemMeta(item_meta);
+                    List<String> lore = Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason(), "期間:" + mutes.getDateString());
+                    item = new ItemUtil(mutes.getPlayer(), name, lore);
                 }
-                inv.setItem(i, item);
+                inv.setItem(i, item.toItemStack());
             }
 
-            ItemStack skull_right = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            SkullMeta right_meta = (SkullMeta) skull_right.getItemMeta();
-            right_meta.setOwningPlayer(Bukkit.getOfflinePlayer("MHF_ArrowRight"));
-            skull_right.setItemMeta(right_meta);
+            ItemStack skull_right = new ItemUtil("MHF_ArrowRight", "次のページへ進む", null).toItemStack();
             inv.setItem(53, skull_right);
 
             return inv;
@@ -68,26 +66,23 @@ public class InventoryManager {
 
                 Bukkit.broadcastMessage(i + "\n" + mute_list.size() + "\n" + mute_list);
                 MuteManager.Mute mutes = mute_list.get(i);
-                ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-                SkullMeta item_meta = (SkullMeta) item.getItemMeta();
-                item_meta.setOwner(mutes.getPlayer().getName());
+
+                ItemUtil item;
+                String name = mutes.getPlayer().getName();
                 if (mutes.getType().equals(MuteManager.MuteType.NORMAL)) {
-                    item_meta.setLore(Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason()));
-                    item.setItemMeta(item_meta);
+                    List<String> lore = Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason());
+                    item = new ItemUtil(mutes.getPlayer(), name, lore);
                 }
                 else {
-                    item_meta.setLore(Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason(), "期間:" + mutes.getDateString()));
-                    item.setItemMeta(item_meta);
+                    List<String> lore = Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason(), "期間:" + mutes.getDateString());
+                    item = new ItemUtil(mutes.getPlayer(), name, lore);
                 }
-                inv_page.getInventory(page).setItem(n, item);
+                inv_page.getInventory(page).setItem(n, item.toItemStack());
 
                 n++;
             }
 
-            ItemStack skull_right = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            SkullMeta right_meta = (SkullMeta) skull_right.getItemMeta();
-            right_meta.setOwningPlayer(Bukkit.getOfflinePlayer("MHF_ArrowRight"));
-            skull_right.setItemMeta(right_meta);
+            ItemStack skull_right = new ItemUtil("MHF_ArrowRight", "次のページへ進む", null).toItemStack();
             inv_page.setAllInventory(53, skull_right);
 
             return inv_page.getInventory(1);
@@ -97,17 +92,16 @@ public class InventoryManager {
     public static Inventory openMute(OfflinePlayer player) {
         Inventory inv = Bukkit.createInventory(null, 9 * 3, ChatColor.DARK_AQUA + player.getName() + "のミュート解除しますか？");
 
-        ItemStack green = new Wool(DyeColor.GREEN).toItemStack(1);
-        ItemMeta green_meta = green.getItemMeta();
-        green_meta.setDisplayName("解除する");
-        green.setItemMeta(green_meta);
-        ItemStack red = new Wool(DyeColor.RED).toItemStack(1);
-        ItemMeta red_meta = red.getItemMeta();
-        red_meta.setDisplayName("解除しない");
-        red.setItemMeta(red_meta);
+        //緑羊毛
+        Wool green = new Wool(DyeColor.GREEN);
+        ItemUtil item_green = new ItemUtil(green, "解除する", null);
 
-        inv.setItem(11, green);
-        inv.setItem(14, red);
+        //赤羊毛
+        Wool red = new Wool(DyeColor.RED);
+        ItemUtil item_red = new ItemUtil(red, "解除しない", null);
+
+        inv.setItem(11, item_green.toItemStack());
+        inv.setItem(14, item_red.toItemStack());
 
         return inv;
     }
