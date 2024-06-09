@@ -37,6 +37,9 @@ public class PlayerManager extends JavaPlugin {
         //set
         getCommand("command_log").setExecutor(new SetCommand());
 
+        //player
+        getCommand("open_inv").setExecutor(new OpenInventoryCommand());
+
         //listener
         plm.registerEvents(new PlayerChatListener(), this);
         plm.registerEvents(new PlayerCommandListener(), this);

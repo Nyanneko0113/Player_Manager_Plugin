@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
@@ -104,6 +105,25 @@ public class InventoryManager {
         inv.setItem(14, item_red.toItemStack());
 
         return inv;
+    }
+
+    public static Inventory openPlayerInventory(Player player) {
+        InventoryUtil inv = new InventoryUtil(Bukkit.createInventory(null, 9 * 6, player.getName() + "のインベントリ"));
+        PlayerInventory player_inv = player.getInventory();
+        int a = 0;
+        for (int n = 36; n < 44; n++) {
+            inv.setItem(0, n, player_inv.getItem(a));
+            a++;
+        }
+        int b = 0;
+        for (int n = 9; n < 35; n++) {
+            inv.setItem(0, b, player_inv.getItem(n));
+            b++;
+        }
+        inv.replaceItem(0, new ItemUtil(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " ", null).toItemStack(), 27, 36);
+        inv.setItem(0, 53, new ItemUtil(Material.BARRIER, "閉じる", null).toItemStack());
+
+        return inv.getInventory(0);
     }
 
 }

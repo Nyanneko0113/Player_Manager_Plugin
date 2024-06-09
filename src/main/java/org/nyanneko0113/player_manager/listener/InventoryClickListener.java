@@ -38,11 +38,20 @@ public class InventoryClickListener implements Listener {
             }
         }
         else if (inv.getTitle().contains("のミュート解除しますか？")) {
+            event.setCancelled(true);
+
             if (event.getSlot() == 11) {
                 String player_name = inv.getTitle().replace("のミュート解除しますか？", "");
 
                 MuteManager.removeMute(Bukkit.getOfflinePlayer(player_name));
                 player.sendMessage("ミュートを解除しました。");
+            }
+        }
+        else if (inv.getTitle().contains("のインベントリ")) {
+            event.setCancelled(true);
+
+            if (event.getSlot() == 53) {
+                player.closeInventory();
             }
         }
 

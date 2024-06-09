@@ -30,6 +30,9 @@ commands:
   playerinfo:
     description: プレイヤーの情報を取得するコマンド
     permission: playermanager.commands.playerinfo
+  open_inv:
+    description: プレイヤーのインベントリを取得するコマンド
+    permission: playermanager.commands.open_inv
   kick:
     description: プレイヤーをキックするコマンド
     permission: playermanager.commands.kick
