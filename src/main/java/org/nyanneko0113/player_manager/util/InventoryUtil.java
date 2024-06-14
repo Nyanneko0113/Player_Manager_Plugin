@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class InventoryUtil {
 
@@ -56,6 +57,16 @@ public class InventoryUtil {
     public void setAllInventory(int i, ItemStack item) {
         for (Inventory inv : inv_list) {
             inv.setItem(i, item);
+        }
+    }
+
+    public void setArenaAllInventory(int start, int end, ItemStack item) {
+        int a = Math.min(start, end);
+        int b = Math.max(start, end);
+        for (int i = a; i < b; i++) {
+            for (Inventory inv : inv_list) {
+                inv.setItem(i, item);
+            }
         }
     }
 

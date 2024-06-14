@@ -18,14 +18,18 @@ import java.util.List;
 
 public class InventoryManager {
 
-    public static final InventoryUtil inv_page = new InventoryUtil();
+    public static InventoryUtil mute_invs;
 
     public static Inventory openMuteList() {
         int max_slot = 8;
         List<MuteManager.Mute> mute_list = MuteManager.getMuteList();
 
         if (mute_list.size() <= max_slot) {
+            InventoryUtil inv_page = new InventoryUtil();
+
+            //シングルページ
             Inventory inv = Bukkit.createInventory(null, 9 * 6, ChatColor.DARK_AQUA + "ミュートしているプレイヤー");
+            inv_page.addInventory(inv);
 
             for (int i = 0; i < mute_list.size(); i++) {
                 Bukkit.broadcastMessage(i + "\n" + mute_list.size() + "\n" + mute_list);
@@ -44,12 +48,16 @@ public class InventoryManager {
                 inv.setItem(i, item.toItemStack());
             }
 
-            ItemStack skull_right = new ItemUtil("MHF_ArrowRight", "次のページへ進む", null).toItemStack();
-            inv.setItem(53, skull_right);
+            ItemStack space_item = new ItemUtil(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 3), " ", null).toItemStack();
+            inv_page.replaceItem(0, space_item, 36, 45);
 
+            mute_invs=inv_page;
             return inv;
         }
         else {
+            InventoryUtil inv_page = new InventoryUtil();
+
+            //マルチページ
             int page_count = (int) Math.ceil((double) mute_list.size() / max_slot);
 
             for (int x = 1; x <= page_count; x++) {
@@ -71,10 +79,12 @@ public class InventoryManager {
                 ItemUtil item;
                 String name = mutes.getPlayer().getName();
                 if (mutes.getType().equals(MuteManager.MuteType.NORMAL)) {
+                    //通常ミュート用
                     List<String> lore = Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason());
                     item = new ItemUtil(mutes.getPlayer(), name, lore);
                 }
                 else {
+                    //期間ミュート用
                     List<String> lore = Arrays.asList("Banの種類:" + mutes.getType().name(), "理由:" + mutes.getReason(), "期間:" + mutes.getDateString());
                     item = new ItemUtil(mutes.getPlayer(), name, lore);
                 }
@@ -83,9 +93,13 @@ public class InventoryManager {
                 n++;
             }
 
+            ItemStack space_item = new ItemUtil(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 3), " ", null).toItemStack();
+            inv_page.setArenaAllInventory(35, 44, space_item);
+
             ItemStack skull_right = new ItemUtil("MHF_ArrowRight", "次のページへ進む", null).toItemStack();
             inv_page.setAllInventory(53, skull_right);
 
+            mute_invs=inv_page;
             return inv_page.getInventory(1);
         }
     }

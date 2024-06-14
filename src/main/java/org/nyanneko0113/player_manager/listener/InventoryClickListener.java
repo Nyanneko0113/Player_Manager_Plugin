@@ -23,37 +23,45 @@ public class InventoryClickListener implements Listener {
     public void onClick(InventoryClickEvent event) throws IOException {
         Inventory inv = event.getInventory();
         HumanEntity player = event.getWhoClicked();
+        ItemStack item = event.getCurrentItem();
 
-        if (inv.getTitle().contains(ChatColor.DARK_AQUA + "ミュートしているプレイヤー")) {
-            event.setCancelled(true);
+        if (event.getCurrentItem() != null) {
 
-            if (event.getSlot() == 53) {
+            //ミュートリストGUI
+            if (inv.getTitle().contains(ChatColor.DARK_AQUA + "ミュートしているプレイヤー")) {
+                event.setCancelled(true);
+
                 String page = inv.getTitle().replace(ChatColor.DARK_AQUA + "ミュートしているプレイヤー(", "").replace("ページ目)", "");
+                if (event.getSlot() == 53 && item.getType().equals(Material.SKULL_ITEM)) {
+                    player.openInventory(InventoryManager.mute_invs.getInventory(Integer.parseInt(page) + 1));
+                }
+                else {
+                    SkullMeta meta = (SkullMeta) event.getCurrentItem().getItemMeta();
+                    player.openInventory(InventoryManager.openMute(meta.getOwningPlayer()));
+                }
+            }
 
-                player.openInventory(InventoryManager.inv_page.getInventory(Integer.parseInt(page) + 1));
+            //ミュート解除GUI
+            else if (inv.getTitle().contains("のミュート解除しますか？")) {
+                event.setCancelled(true);
+
+                if (event.getSlot() == 11) {
+                    String player_name = inv.getTitle().replace("のミュート解除しますか？", "");
+
+                    MuteManager.removeMute(Bukkit.getOfflinePlayer(player_name));
+                    player.sendMessage("ミュートを解除しました。");
+                }
             }
-            else {
-                SkullMeta meta = (SkullMeta) event.getCurrentItem().getItemMeta();
-                player.openInventory(InventoryManager.openMute(meta.getOwningPlayer()));
+
+            //プレイヤーインベントリ
+            else if (inv.getTitle().contains("のインベントリ")) {
+                event.setCancelled(true);
+
+                if (event.getSlot() == 53) {
+                    player.closeInventory();
+                }
             }
+
         }
-        else if (inv.getTitle().contains("のミュート解除しますか？")) {
-            event.setCancelled(true);
-
-            if (event.getSlot() == 11) {
-                String player_name = inv.getTitle().replace("のミュート解除しますか？", "");
-
-                MuteManager.removeMute(Bukkit.getOfflinePlayer(player_name));
-                player.sendMessage("ミュートを解除しました。");
-            }
-        }
-        else if (inv.getTitle().contains("のインベントリ")) {
-            event.setCancelled(true);
-
-            if (event.getSlot() == 53) {
-                player.closeInventory();
-            }
-        }
-
     }
 }
