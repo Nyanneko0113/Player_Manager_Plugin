@@ -121,21 +121,40 @@ public class InventoryManager {
         return inv;
     }
 
+    //プレイヤーのインベントリ
     public static Inventory openPlayerInventory(Player player) {
         InventoryUtil inv = new InventoryUtil(Bukkit.createInventory(null, 9 * 6, player.getName() + "のインベントリ"));
         PlayerInventory player_inv = player.getInventory();
+
+        //装備系
+        ItemStack space_barrier = new ItemUtil(Material.BARRIER, "装備がありません", null).toItemStack();
+        ItemStack helmet = player_inv.getHelmet() == null ? space_barrier : player_inv.getHelmet();
+        ItemStack chest = player_inv.getChestplate() == null ? space_barrier : player_inv.getChestplate();
+        ItemStack legg = player_inv.getLeggings() == null ? space_barrier : player_inv.getLeggings();
+        ItemStack boots = player_inv.getBoots() == null ? space_barrier : player_inv.getBoots();
+        ItemStack offhand = player_inv.getItemInOffHand() == null ? space_barrier : player_inv.getItemInOffHand();
+        inv.setItem(0, 0, helmet);
+        inv.setItem(0, 1, chest);
+        inv.setItem(0, 2, legg);
+        inv.setItem(0, 3, boots);
+        inv.setItem(0, 4, offhand);
+
+        //HotBar
         int a = 0;
-        for (int n = 36; n < 44; n++) {
+        for (int n = 46; n < 54; n++) {
             inv.setItem(0, n, player_inv.getItem(a));
             a++;
         }
-        int b = 0;
+
+        //HotBar以外
+        int b = 18;
         for (int n = 9; n < 35; n++) {
             inv.setItem(0, b, player_inv.getItem(n));
             b++;
         }
-        inv.replaceItem(0, new ItemUtil(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " ", null).toItemStack(), 27, 36);
-        inv.setItem(0, 53, new ItemUtil(Material.BARRIER, "閉じる", null).toItemStack());
+
+        //空白
+        inv.replaceItem(0, new ItemUtil(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 3), "", null).toItemStack(), 9, 18);
 
         return inv.getInventory(0);
     }
