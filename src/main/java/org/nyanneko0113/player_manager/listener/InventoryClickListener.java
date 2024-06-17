@@ -57,7 +57,7 @@ public class InventoryClickListener implements Listener {
             else if (inv.getTitle().contains("のインベントリ")) {
                 event.setCancelled(true);
 
-                if (event.getSlot() == 53) {
+                if (event.getSlot() == 8) {
                     player.closeInventory();
                 }
             }

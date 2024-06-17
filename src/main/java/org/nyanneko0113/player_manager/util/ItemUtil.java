@@ -3,6 +3,8 @@ package org.nyanneko0113.player_manager.util;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -23,6 +25,19 @@ public class ItemUtil {
         meta.setDisplayName(name);
         meta.setLore(lore == null ? new ArrayList<>() : lore);
         item.setItemMeta(meta);
+    }
+
+    //エンチャント
+    public ItemUtil(Material item, String name, List<String> lore, Enchantment enc, int level) {
+        this.item = new ItemStack(item);
+
+        ItemMeta meta = this.item.getItemMeta();
+        meta.setDisplayName(name);
+        meta.setLore(lore == null ? new ArrayList<>() : lore);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        this.item.addUnsafeEnchantment(enc, level);
+        this.item.setItemMeta(meta);
     }
 
     //羊毛用

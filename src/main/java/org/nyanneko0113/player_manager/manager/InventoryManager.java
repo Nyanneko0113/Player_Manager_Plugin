@@ -1,6 +1,7 @@
 package org.nyanneko0113.player_manager.manager;
 
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -132,7 +133,7 @@ public class InventoryManager {
         ItemStack chest = player_inv.getChestplate() == null ? space_barrier : player_inv.getChestplate();
         ItemStack legg = player_inv.getLeggings() == null ? space_barrier : player_inv.getLeggings();
         ItemStack boots = player_inv.getBoots() == null ? space_barrier : player_inv.getBoots();
-        ItemStack offhand = player_inv.getItemInOffHand() == null ? space_barrier : player_inv.getItemInOffHand();
+        ItemStack offhand = player_inv.getItemInOffHand().getType().equals(Material.AIR) ? space_barrier : player_inv.getItemInOffHand();
         inv.setItem(0, 0, helmet);
         inv.setItem(0, 1, chest);
         inv.setItem(0, 2, legg);
@@ -141,20 +142,28 @@ public class InventoryManager {
 
         //HotBar
         int a = 0;
-        for (int n = 46; n < 54; n++) {
-            inv.setItem(0, n, player_inv.getItem(a));
+        for (int n = 45; n < 54; n++) {
+            ItemStack item = player_inv.getItem(a);
+            inv.setItem(0, n, item);
             a++;
         }
 
         //HotBar以外
         int b = 18;
         for (int n = 9; n < 35; n++) {
-            inv.setItem(0, b, player_inv.getItem(n));
+            ItemStack item = player_inv.getItem(n);
+            inv.setItem(0, b, item);
             b++;
         }
 
+        //閉じる
+        ItemStack close_item = new ItemUtil(Material.BARRIER, "閉じる", null, Enchantment.ARROW_DAMAGE, 1).toItemStack();
+        inv.setItem(0, 8, close_item);
+
         //空白
-        inv.replaceItem(0, new ItemUtil(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 3), "", null).toItemStack(), 9, 18);
+        ItemStack space_item = new ItemUtil(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 3), " ", null).toItemStack();
+        inv.replaceItem(0, space_item, 5, 8);
+        inv.replaceItem(0, space_item, 9, 18);
 
         return inv.getInventory(0);
     }

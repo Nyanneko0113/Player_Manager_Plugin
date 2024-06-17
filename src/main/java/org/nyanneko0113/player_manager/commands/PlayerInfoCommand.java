@@ -15,7 +15,7 @@ public class PlayerInfoCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender send, Command cmd ,String s, String[] args) {
         if (cmd.getName().equalsIgnoreCase("playerinfo")) {
-            if (args.length == 1) {
+            if (args.length >= 1) {
                 Player player = Bukkit.getPlayer(args[0]);
                 InetSocketAddress address = player.getAddress();
                 send.sendMessage(TextUtil.TEXT_INFO + "UUID:" + player.getUniqueId() + "\n" +

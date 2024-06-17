@@ -26,7 +26,7 @@ public class BanCommand implements CommandExecutor {
             }
             else {
                 Player player = Bukkit.getPlayer(args[0]);
-                if (args.length == 1) BanManager.normalBan(player, "None.");
+                if (args.length > 1) BanManager.normalBan(player, "None.");
                 BanManager.normalBan(player, args[1]);
                 send.sendMessage(TextUtil.TEXT_INFO + player.getName() + "をBanしました。");
             }

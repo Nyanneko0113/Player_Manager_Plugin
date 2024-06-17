@@ -20,8 +20,8 @@ public class KickCommand implements CommandExecutor {
             }
             else {
                 Player player = Bukkit.getPlayer(args[0]);
-                if (args.length == 1) player.kickPlayer("あなたはキックされました。" + "\n" + "理由：None");
-                else if (args.length == 2) player.kickPlayer("あなたはキックされました。" + "\n" + "理由：" + args[1]);
+                if (args.length > 1) player.kickPlayer("あなたはキックされました。" + "\n" + "理由：None");
+                if (args.length > 2) player.kickPlayer("あなたはキックされました。" + "\n" + "理由：" + args[1]);
                 send.sendMessage(TextUtil.TEXT_INFO + player.getName() + "をキックしました。");
             }
         }
