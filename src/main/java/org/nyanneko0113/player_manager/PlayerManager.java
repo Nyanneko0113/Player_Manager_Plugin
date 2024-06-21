@@ -36,6 +36,7 @@ public class PlayerManager extends JavaPlugin {
 
         //set
         getCommand("command_log").setExecutor(new SetCommand());
+        getCommand("hide").setExecutor(new PlayerHideCommand());
 
         //player
         getCommand("open_inv").setExecutor(new OpenInventoryCommand());

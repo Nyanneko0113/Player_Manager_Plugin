@@ -42,3 +42,6 @@ commands:
   command_log:
     description: コマンドログを有効にするコマンド
     permission: playermanager.commands.command_log
+  hide:
+    description: ミュートするコマンド
+    permission: playermanager.commands.normalmute
