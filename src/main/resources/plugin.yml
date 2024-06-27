@@ -27,6 +27,9 @@ commands:
   ban_list:
     description: Banするコマンド
     permission: playermanager.commands.normalmute
+  warn:
+    description: ミュートするコマンド
+    permission: playermanager.commands.normalmute
   playerinfo:
     description: プレイヤーの情報を取得するコマンド
     permission: playermanager.commands.playerinfo

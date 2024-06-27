@@ -27,6 +27,9 @@ public class PlayerManager extends JavaPlugin {
         getCommand("normal_ban").setExecutor(new BanCommand());
         getCommand("temp_ban").setExecutor(new BanCommand());
 
+        //warn
+        getCommand("warn").setExecutor(new WarnCommand());
+
         //kick
         getCommand("kick").setExecutor(new KickCommand());
         getCommand("all_kick").setExecutor(new KickCommand());
