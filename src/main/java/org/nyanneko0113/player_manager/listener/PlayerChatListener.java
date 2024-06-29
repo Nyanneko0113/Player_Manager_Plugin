@@ -33,16 +33,22 @@ public class PlayerChatListener implements Listener {
         }
     }
 
-    //チャット非表示用
+    //特定のプレイヤーのチャット非表示用
     @EventHandler
     public void onChatHide(AsyncPlayerChatEvent event) throws IOException {
-
         for (Player players : event.getRecipients()) {
-            if (!PlayerDataManager.getPlayerData(Bukkit.getPlayer(players.getName())).contains(event.getPlayer())) {
+            boolean player_hide = PlayerDataManager.getPlayerData(Bukkit.getPlayer(players.getName())).contains(event.getPlayer());
+            boolean word_hide = PlayerDataManager.getPlayerHideWord(players).contains(event.getMessage());
+
+            Bukkit.broadcastMessage(PlayerDataManager.getPlayerData(Bukkit.getPlayer(players.getName())) + "\n" +
+                    PlayerDataManager.getPlayerHideWord(players));
+            boolean a = !player_hide || !word_hide;
+            boolean b = !player_hide && !word_hide;
+            if (a && b) {
                 players.sendMessage( "<" + event.getPlayer().getName() + ">: " + event.getMessage());
             }
+            event.setCancelled(true);
         }
-
-        event.setCancelled(true);
     }
+
 }
